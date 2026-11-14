@@ -46,12 +46,19 @@ jobs:
             git clone --depth 1 --branch master https://github.com/abseil/abseil-cpp.git TMessagesProj/jni/third_party/absl
           fi
           test -f TMessagesProj/jni/third_party/absl/CMakeLists.txt
-          if [ ! -f TMessagesProj/jni/tgcalls/tgcalls/AudioDeviceHelper.cpp ] || [ ! -f TMessagesProj/jni/tgcalls/tgcalls/platform/android/AndroidInterface.cpp ]; then
+          if [ ! -f TMessagesProj/jni/tgcalls/tgcalls/AudioDeviceHelper.cpp ] || [ ! -f TMessagesProj/jni/tgcalls/tgcalls/platform/android/AndroidInterface.cpp ] || [ ! -f TMessagesProj/jni/tgcalls/tgcalls/group/AudioStreamingPart.cpp ]; then
             rm -rf TMessagesProj/jni/tgcalls
-            git clone --depth 1 https://github.com/TelegramMessenger/tgcalls.git TMessagesProj/jni/tgcalls
+            git clone --depth 1 --branch master https://github.com/TelegramMessenger/tgcalls.git TMessagesProj/jni/tgcalls
           fi
           test -f TMessagesProj/jni/tgcalls/tgcalls/AudioDeviceHelper.cpp
           test -f TMessagesProj/jni/tgcalls/tgcalls/platform/android/AndroidInterface.cpp
+          test -f TMessagesProj/jni/tgcalls/tgcalls/group/AudioStreamingPart.cpp
+          if [ ! -f TMessagesProj/jni/third_party/xiph/ogg/src/bitwise.c ]; then
+            rm -rf TMessagesProj/jni/third_party/xiph/ogg
+            mkdir -p TMessagesProj/jni/third_party/xiph
+            git clone --depth 1 https://github.com/xiph/ogg.git TMessagesProj/jni/third_party/xiph/ogg
+          fi
+          test -f TMessagesProj/jni/third_party/xiph/ogg/src/bitwise.c
           if [ ! -f TMessagesProj/jni/third_party/xiph/opusfile/src/info.c ]; then
             rm -rf TMessagesProj/jni/third_party/xiph/opusfile
             mkdir -p TMessagesProj/jni/third_party/xiph
