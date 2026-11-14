@@ -44,6 +44,14 @@ jobs:
             git clone --depth 1 https://chromium.googlesource.com/libyuv/libyuv TMessagesProj/jni/third_party/libyuv
           fi
           test -f TMessagesProj/jni/third_party/libyuv/CMakeLists.txt
+          # WebRTC's VP8/VP9 codec sources require the libvpx public headers.
+          # Restore the declared submodule when its gitlink is absent from this snapshot.
+          if [ ! -f TMessagesProj/jni/third_party/libvpx/vpx/vp8cx.h ] || [ ! -f TMessagesProj/jni/third_party/libvpx/vpx/vpx_codec.h ]; then
+            rm -rf TMessagesProj/jni/third_party/libvpx
+            git clone --depth 1 https://github.com/webmproject/libvpx.git TMessagesProj/jni/third_party/libvpx
+          fi
+          test -f TMessagesProj/jni/third_party/libvpx/vpx/vp8cx.h
+          test -f TMessagesProj/jni/third_party/libvpx/vpx/vpx_codec.h
           if [ ! -f TMessagesProj/jni/third_party/absl/CMakeLists.txt ]; then
             rm -rf TMessagesProj/jni/third_party/absl
             git clone --depth 1 --branch master https://github.com/abseil/abseil-cpp.git TMessagesProj/jni/third_party/absl
