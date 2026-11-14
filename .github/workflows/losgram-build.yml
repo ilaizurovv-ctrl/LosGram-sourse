@@ -68,19 +68,14 @@ jobs:
           if [ ! -f TMessagesProj/jni/tgcalls/tgcalls/AudioDeviceHelper.cpp ] || [ ! -f TMessagesProj/jni/tgcalls/tgcalls/platform/android/AndroidInterface.cpp ] || [ ! -f TMessagesProj/jni/tgcalls/tgcalls/group/AudioStreamingPart.cpp ]; then
             rm -rf TMessagesProj/jni/tgcalls
             git clone https://github.com/TelegramMessenger/tgcalls.git TMessagesProj/jni/tgcalls
-            git -C TMessagesProj/jni/tgcalls checkout 545f5ae599f8282e1ae3f38aaff166d179d75703
+            git -C TMessagesProj/jni/tgcalls checkout 5f1c70c59003f41f9f579277cb5a7d61061a0de7
           fi
           test -f TMessagesProj/jni/tgcalls/tgcalls/AudioDeviceHelper.cpp
           test -f TMessagesProj/jni/tgcalls/tgcalls/platform/android/AndroidInterface.cpp
           test -f TMessagesProj/jni/tgcalls/tgcalls/group/AudioStreamingPart.cpp
-          # Keep this tgcalls snapshot compatible with the older WebRTC API embedded in this source tree.
-          sed -i 's/OnUnDemuxableRtpPacket(const webrtc::RtpPacketReceived &packet) override/OnUnDemuxableRtpPacket(const webrtc::RtpPacketReceived \&packet)/' TMessagesProj/jni/tgcalls/tgcalls/group/GroupInstanceReferenceImpl.cpp
-          sed -i '/config.disable_payload_type_demuxing = true;/d' TMessagesProj/jni/tgcalls/tgcalls/group/GroupInstanceReferenceImpl.cpp
-          ! grep -q 'disable_payload_type_demuxing' TMessagesProj/jni/tgcalls/tgcalls/group/GroupInstanceReferenceImpl.cpp
           test -f TMessagesProj/jni/tgcalls/tgcalls/ChannelManager.cpp
-          # The Android tgcalls revision renamed the old ICE transport implementation to DTLS.
-          sed -i 's/MtProtoIceTransport.cpp/MtProtoDtlsTransport.cpp/g; s/MtProtoIceTransportTest.cpp/MtProtoDtlsTransportTest.cpp/g' TMessagesProj/jni/voip/CMakeLists.txt
-          test -f TMessagesProj/jni/tgcalls/tgcalls/v2/MtProtoDtlsTransport.cpp
+          # Keep the ICE transport source list aligned with the WebRTC API in this checkout.
+          test -f TMessagesProj/jni/tgcalls/tgcalls/v2/MtProtoIceTransport.cpp
           if [ ! -f TMessagesProj/jni/third_party/xiph/ogg/src/bitwise.c ]; then
             rm -rf TMessagesProj/jni/third_party/xiph/ogg
             mkdir -p TMessagesProj/jni/third_party/xiph
