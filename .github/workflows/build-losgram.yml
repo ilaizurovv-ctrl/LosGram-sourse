@@ -33,6 +33,12 @@ jobs:
             git clone --depth 1 --branch telegram-v1.10.1-ffmpeg https://github.com/Arseny271/media.git TMessagesProj_Modules/media
           fi
           test -f TMessagesProj_Modules/media/core_settings.gradle
+          if [ ! -f TMessagesProj/lib/jlatexmath/jlatexmath/build.gradle ]; then
+            rm -rf TMessagesProj/lib/jlatexmath
+            mkdir -p TMessagesProj/lib
+            git clone --depth 1 --branch android https://github.com/dkaraush/jlatexmath-android.git TMessagesProj/lib/jlatexmath
+          fi
+          test -f TMessagesProj/lib/jlatexmath/jlatexmath/build.gradle
 
       - name: Set up Java
         uses: actions/setup-java@v4
