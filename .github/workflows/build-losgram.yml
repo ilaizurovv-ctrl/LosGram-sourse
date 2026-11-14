@@ -51,7 +51,8 @@ jobs:
           test -f TMessagesProj/jni/third_party/absl/CMakeLists.txt
           if [ ! -f TMessagesProj/jni/tgcalls/tgcalls/AudioDeviceHelper.cpp ] || [ ! -f TMessagesProj/jni/tgcalls/tgcalls/platform/android/AndroidInterface.cpp ] || [ ! -f TMessagesProj/jni/tgcalls/tgcalls/group/AudioStreamingPart.cpp ]; then
             rm -rf TMessagesProj/jni/tgcalls
-            git clone --depth 1 --branch master https://github.com/TelegramMessenger/tgcalls.git TMessagesProj/jni/tgcalls
+            git clone https://github.com/TelegramMessenger/tgcalls.git TMessagesProj/jni/tgcalls
+            git -C TMessagesProj/jni/tgcalls checkout 8ec8837f169a3594ad457c8ee47f9ecb4d576275
           fi
           test -f TMessagesProj/jni/tgcalls/tgcalls/AudioDeviceHelper.cpp
           test -f TMessagesProj/jni/tgcalls/tgcalls/platform/android/AndroidInterface.cpp
