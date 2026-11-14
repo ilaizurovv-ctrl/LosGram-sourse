@@ -36,18 +36,6 @@ jobs:
             git clone --depth 1 --branch android https://github.com/dkaraush/jlatexmath-android.git TMessagesProj/lib/jlatexmath
           fi
           test -f TMessagesProj/lib/jlatexmath/jlatexmath/build.gradle
-          if [ ! -f TMessagesProj/lib/jlatexmath/jlatexmath/build.gradle ]; then
-            rm -rf TMessagesProj/lib/jlatexmath
-            mkdir -p TMessagesProj/lib
-            git clone --depth 1 --branch android https://github.com/dkaraush/jlatexmath-android.git TMessagesProj/lib/jlatexmath
-          fi
-          test -f TMessagesProj/lib/jlatexmath/jlatexmath/build.gradle
-          if [ ! -f TMessagesProj/lib/jlatexmath/jlatexmath/build.gradle ]; then
-            rm -rf TMessagesProj/lib/jlatexmath
-            mkdir -p TMessagesProj/lib
-            git clone --depth 1 --branch android https://github.com/dkaraush/jlatexmath-android.git TMessagesProj/lib/jlatexmath
-          fi
-          test -f TMessagesProj/lib/jlatexmath/jlatexmath/build.gradle
           if [ ! -f TMessagesProj/jni/third_party/libyuv/CMakeLists.txt ]; then
             rm -rf TMessagesProj/jni/third_party/libyuv
             git clone --depth 1 https://chromium.googlesource.com/libyuv/libyuv TMessagesProj/jni/third_party/libyuv
@@ -58,6 +46,18 @@ jobs:
             git clone --depth 1 --branch master https://github.com/abseil/abseil-cpp.git TMessagesProj/jni/third_party/absl
           fi
           test -f TMessagesProj/jni/third_party/absl/CMakeLists.txt
+          if [ ! -f TMessagesProj/jni/tgcalls/tgcalls/AudioDeviceHelper.cpp ] || [ ! -f TMessagesProj/jni/tgcalls/tgcalls/platform/android/AndroidInterface.cpp ]; then
+            rm -rf TMessagesProj/jni/tgcalls
+            git clone --depth 1 https://github.com/TelegramMessenger/tgcalls.git TMessagesProj/jni/tgcalls
+          fi
+          test -f TMessagesProj/jni/tgcalls/tgcalls/AudioDeviceHelper.cpp
+          test -f TMessagesProj/jni/tgcalls/tgcalls/platform/android/AndroidInterface.cpp
+          if [ ! -f TMessagesProj/jni/third_party/xiph/opusfile/src/info.c ]; then
+            rm -rf TMessagesProj/jni/third_party/xiph/opusfile
+            mkdir -p TMessagesProj/jni/third_party/xiph
+            git clone --depth 1 https://github.com/xiph/opusfile.git TMessagesProj/jni/third_party/xiph/opusfile
+          fi
+          test -f TMessagesProj/jni/third_party/xiph/opusfile/src/info.c
 
       - name: Set up Java
         uses: actions/setup-java@v4
