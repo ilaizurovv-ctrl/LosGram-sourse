@@ -46,6 +46,19 @@ jobs:
             git clone --depth 1 --branch master https://github.com/abseil/abseil-cpp.git TMessagesProj/jni/third_party/absl
           fi
           test -f TMessagesProj/jni/third_party/absl/CMakeLists.txt
+          # This WebRTC snapshot uses the historical absl::Nonnull<T> spelling.
+          # Upstream Abseil exposes nullability as pointer annotations instead.
+          if ! grep -q 'using Nonnull =' TMessagesProj/jni/third_party/absl/absl/base/nullability.h; then
+            sed -i '/#endif  \/\/ ABSL_BASE_NULLABILITY_H_/i namespace absl { template <typename T> using Nonnull = T; }' TMessagesProj/jni/third_party/absl/absl/base/nullability.h
+          fi
+          grep -q 'using Nonnull =' TMessagesProj/jni/third_party/absl/absl/base/nullability.h
+          # The FFmpeg submodule may be absent in the source snapshot; restore the
+          # version expected by the Telegram Media3 integration.
+          if [ ! -f TMessagesProj/jni/third_party/ffmpeg/libavutil/timestamp.h ]; then
+            rm -rf TMessagesProj/jni/third_party/ffmpeg
+            git clone --depth 1 --branch n7.1.1 https://github.com/FFmpeg/FFmpeg.git TMessagesProj/jni/third_party/ffmpeg
+          fi
+          test -f TMessagesProj/jni/third_party/ffmpeg/libavutil/timestamp.h
           if [ ! -f TMessagesProj/jni/third_party/boringssl/include/openssl/aes.h ] || [ ! -f TMessagesProj/jni/third_party/boringssl/include/openssl/rand.h ]; then
             rm -rf TMessagesProj/jni/third_party/boringssl
             git clone --depth 1 https://github.com/google/boringssl.git TMessagesProj/jni/third_party/boringssl
