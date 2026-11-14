@@ -1,25 +1,22 @@
-# ShuzaGram Mod
+# LosGram
 
-An Android Telegram client based on the open-source [Telegram for Android](https://github.com/DrKLO/Telegram) sources, with extra features:
+LosGram is an independent Android Telegram client based on the ShuzaGram Mod source code and the open-source Telegram for Android project.
 
-- **Liquid glass UI** — translucent, blurred surfaces across the app.
-- **Ghost mode** — hide online/typing/read receipts; optional scheduled-send delay.
-- **Kept messages** — deleted messages stay with a mark; edit history is viewable.
-- **Couples** — a shared relationship status and days-together counter, by mutual consent.
-- **Profile banners**, custom fonts, themes and app icons.
-- **Plugin system** compatible with exteraGram `.plugin` files (embedded Python).
+This repository preserves the upstream ShuzaGram functionality while beginning the LosGram rebrand. It includes the original plugin system and the features documented in the source project.
 
-Not affiliated with Telegram FZ-LLC or exteraGram. Licensed under **GPL-2.0** (see `LICENSE`).
+LosGram is not affiliated with Telegram FZ-LLC, ShuzaGram, or exteraGram. This project is licensed under **GPL-2.0**; see [LICENSE](LICENSE). Keep all required upstream copyright and license notices when modifying or redistributing the source.
 
 ## Building
 
-1. `git submodule update --init --recursive` to fetch the native dependencies.
-2. Get your own `api_id` / `api_hash` from <https://my.telegram.org> and set them in
-   `TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java`.
-3. Add your own signing keystore and `google-services.json`.
-4. `./gradlew :TMessagesProj_App:assembleAfatRelease`
+1. Initialize native dependencies: `git submodule update --init --recursive`.
+2. Obtain your own Telegram `api_id` and `api_hash` from <https://my.telegram.org> and configure them in `TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java`.
+3. Configure your own signing keystore and any required Google/Firebase configuration.
+4. Build a debug APK with `./gradlew :TMessagesProj_App:assembleAfatDebug`, or a release APK with `./gradlew :TMessagesProj_App:assembleAfatRelease`.
 
 ## Plugins
 
-Install `.plugin` files in Settings → ShuzaGram Mod → Plugins. The plugin API mirrors
-exteraGram's (`base_plugin`, `client_utils`, `hook_utils`, `ui.settings`, …).
+The upstream plugin system supports exteraGram-compatible `.plugin` files. Its settings entry is available under Settings → LosGram → Plugins.
+
+## Upstream
+
+Based on [ShuzaGram Mod](https://github.com/shuzq-sh/shuzagram-mod) and [Telegram for Android](https://github.com/DrKLO/Telegram).
