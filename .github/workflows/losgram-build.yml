@@ -55,6 +55,9 @@ jobs:
           test -f TMessagesProj/jni/tgcalls/tgcalls/platform/android/AndroidInterface.cpp
           test -f TMessagesProj/jni/tgcalls/tgcalls/group/AudioStreamingPart.cpp
           test -f TMessagesProj/jni/tgcalls/tgcalls/ChannelManager.cpp
+          # The Android tgcalls revision renamed the old ICE transport implementation to DTLS.
+          sed -i 's/MtProtoIceTransport.cpp/MtProtoDtlsTransport.cpp/g; s/MtProtoIceTransportTest.cpp/MtProtoDtlsTransportTest.cpp/g' TMessagesProj/jni/voip/CMakeLists.txt
+          test -f TMessagesProj/jni/tgcalls/tgcalls/v2/MtProtoDtlsTransport.cpp
           if [ ! -f TMessagesProj/jni/third_party/xiph/ogg/src/bitwise.c ]; then
             rm -rf TMessagesProj/jni/third_party/xiph/ogg
             mkdir -p TMessagesProj/jni/third_party/xiph
