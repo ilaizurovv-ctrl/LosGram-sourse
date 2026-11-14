@@ -128,8 +128,9 @@ jobs:
 
       - name: Configure Firebase placeholder when no project config is supplied
         run: |
-          if [ ! -f TMessagesProj/google-services.json ]; then
-            printf '%s\n' '{"project_info":{"project_number":"000000000000","project_id":"losgram-build-placeholder","storage_bucket":"losgram-build-placeholder.appspot.com"},"client":[],"configuration_version":"1"}' > TMessagesProj/google-services.json
+          mkdir -p TMessagesProj_App/src/afat/debug
+          if [ ! -f TMessagesProj_App/src/afat/debug/google-services.json ]; then
+            printf '%s\\n' '{"project_info":{"project_number":"000000000000","project_id":"losgram-build-placeholder","storage_bucket":"losgram-build-placeholder.appspot.com"},"client":[],"configuration_version":"1"}' > TMessagesProj_App/src/afat/debug/google-services.json
           fi
 
       - name: Build universal debug APK
