@@ -96,6 +96,14 @@ jobs:
             git clone --depth 1 https://github.com/xiph/opusfile.git TMessagesProj/jni/third_party/xiph/opusfile
           fi
           test -f TMessagesProj/jni/third_party/xiph/opusfile/src/info.c
+          # WebRTC's Opus codec sources include the public Opus header directly.
+          # The opus submodule gitlink is missing in this repository snapshot.
+          if [ ! -f TMessagesProj/jni/third_party/xiph/opus/include/opus.h ]; then
+            rm -rf TMessagesProj/jni/third_party/xiph/opus
+            mkdir -p TMessagesProj/jni/third_party/xiph
+            git clone --depth 1 --branch v1.5.2 https://github.com/xiph/opus.git TMessagesProj/jni/third_party/xiph/opus
+          fi
+          test -f TMessagesProj/jni/third_party/xiph/opus/include/opus.h
 
       - name: Set up Java
         uses: actions/setup-java@v4
