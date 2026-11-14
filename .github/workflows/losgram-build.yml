@@ -1,0 +1,74 @@
+name: LosGram Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'TMessagesProj/**'
+      - 'TMessagesProj_App/**'
+      - 'gradle.properties'
+      - '.github/workflows/losgram-build.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source and native submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android build tools
+        run: |
+          sdkmanager "platforms;android-36" "build-tools;36.0.0" "ndk;27.2.12479018" "cmake;3.22.1"
+
+      - name: Configure Telegram API credentials
+        env:
+          TELEGRAM_APP_ID: ${{ secrets.TELEGRAM_APP_ID }}
+          TELEGRAM_APP_HASH: ${{ secrets.TELEGRAM_APP_HASH }}
+        run: |
+          if [ -z "$TELEGRAM_APP_ID" ] || [ -z "$TELEGRAM_APP_HASH" ]; then
+            echo "::error::Add TELEGRAM_APP_ID and TELEGRAM_APP_HASH in repository Actions secrets."
+            exit 1
+          fi
+          python3 - <<'PY'
+          import os, pathlib
+          p = pathlib.Path("TMessagesProj/src/main/java/org/telegram/messenger/BuildVars.java")
+          s = p.read_text()
+          import re
+          s = re.sub(r'public static int APP_ID = [0-9]+;', 'public static int APP_ID = ' + os.environ["TELEGRAM_APP_ID"] + ';', s)
+          s = re.sub(r'public static String APP_HASH = "[^"]*";', 'public static String APP_HASH = "' + os.environ["TELEGRAM_APP_HASH"] + '";', s)
+          p.write_text(s)
+          PY
+
+      - name: Configure Firebase placeholder when no project config is supplied
+        run: |
+          if [ ! -f TMessagesProj/google-services.json ]; then
+            printf '%s\n' '{"project_info":{"project_number":"000000000000","project_id":"losgram-build-placeholder","storage_bucket":"losgram-build-placeholder.appspot.com"},"client":[],"configuration_version":"1"}' > TMessagesProj/google-services.json
+          fi
+
+      - name: Build universal debug APK
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon :TMessagesProj_App:assembleAfatDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: LosGram-debug-APK
+          path: TMessagesProj_App/build/outputs/apk/afat/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
