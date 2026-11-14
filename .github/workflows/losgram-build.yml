@@ -46,6 +46,12 @@ jobs:
             git clone --depth 1 --branch master https://github.com/abseil/abseil-cpp.git TMessagesProj/jni/third_party/absl
           fi
           test -f TMessagesProj/jni/third_party/absl/CMakeLists.txt
+          if [ ! -f TMessagesProj/jni/third_party/boringssl/include/openssl/aes.h ] || [ ! -f TMessagesProj/jni/third_party/boringssl/include/openssl/rand.h ]; then
+            rm -rf TMessagesProj/jni/third_party/boringssl
+            git clone --depth 1 https://github.com/google/boringssl.git TMessagesProj/jni/third_party/boringssl
+          fi
+          test -f TMessagesProj/jni/third_party/boringssl/include/openssl/aes.h
+          test -f TMessagesProj/jni/third_party/boringssl/include/openssl/rand.h
           if [ ! -f TMessagesProj/jni/tgcalls/tgcalls/AudioDeviceHelper.cpp ] || [ ! -f TMessagesProj/jni/tgcalls/tgcalls/platform/android/AndroidInterface.cpp ] || [ ! -f TMessagesProj/jni/tgcalls/tgcalls/group/AudioStreamingPart.cpp ]; then
             rm -rf TMessagesProj/jni/tgcalls
             git clone https://github.com/TelegramMessenger/tgcalls.git TMessagesProj/jni/tgcalls
