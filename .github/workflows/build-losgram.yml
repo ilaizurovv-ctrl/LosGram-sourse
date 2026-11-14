@@ -68,6 +68,14 @@ jobs:
           fi
           test -f TMessagesProj/jni/third_party/boringssl/include/openssl/aes.h
           test -f TMessagesProj/jni/third_party/boringssl/include/openssl/rand.h
+          # The WAMR git submodule is declared in .gitmodules but its gitlink is
+          # missing from this source snapshot. Restore the headers used by tgcalls.
+          if [ ! -f TMessagesProj/jni/third_party/wamr/core/iwasm/include/wasm_export.h ]; then
+            rm -rf TMessagesProj/jni/third_party/wamr
+            mkdir -p TMessagesProj/jni/third_party
+            git clone --depth 1 https://github.com/wasm-micro-runtime/wasm-micro-runtime.git TMessagesProj/jni/third_party/wamr
+          fi
+          test -f TMessagesProj/jni/third_party/wamr/core/iwasm/include/wasm_export.h
           if [ ! -f TMessagesProj/jni/tgcalls/tgcalls/AudioDeviceHelper.cpp ] || [ ! -f TMessagesProj/jni/tgcalls/tgcalls/platform/android/AndroidInterface.cpp ] || [ ! -f TMessagesProj/jni/tgcalls/tgcalls/group/AudioStreamingPart.cpp ]; then
             rm -rf TMessagesProj/jni/tgcalls
             git clone https://github.com/TelegramMessenger/tgcalls.git TMessagesProj/jni/tgcalls
